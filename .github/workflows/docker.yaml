@@ -2,7 +2,7 @@ name: Backend Changes Workflow
 
 on:
   push:
-    paths:
+    paths: echo "Running tests for backend..."
       - "backend/**"
   pull_request:
     paths:
