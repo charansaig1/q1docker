@@ -31,7 +31,7 @@ jobs:
 
       - name: Tag Docker image from latest with SHA
         run: |
-          docker tag dockergit:latest dockergit:${{ github.sha }}
+          docker tag dockergit:latest charansaig1/dockergit:${{ github.sha }}
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
