@@ -28,7 +28,7 @@ jobs:
         run: |
           docker build -t dockergit:latest .
 
-      - name: Tag Docker image from latest
+      - name: Tag Docker image from latest with SHA
         run: |
           docker tag dockergit:latest dockergit:${{ github.sha }}
 
@@ -40,5 +40,4 @@ jobs:
 
       - name: Push Docker image to Docker Hub
         run: |
-          docker tag myapp charansaig1/dockergit:${{ github.sha }}
           docker push charansaig1/dockergit:${{ github.sha }}
