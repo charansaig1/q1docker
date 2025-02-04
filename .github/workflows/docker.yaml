@@ -36,5 +36,5 @@ jobs:
 
       - name: Push Docker image to Docker Hub
         run: |
-          docker tag myapp username/myapp:${{ github.sha }}
-          docker push username/myapp:latest
+          docker tag myapp charansaig1/dockergit:${{ github.sha }}
+          docker push charansaig1/dockergit:${{ github.sha }}
