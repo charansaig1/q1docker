@@ -18,8 +18,5 @@ COPY . .
 # Use a default port if PORT is not set.
 # ENV PORT=${PORT:-3000}
 
-# Expose the port that the application listens on.
-
-EXPOSE ${PORT}
 # Run the application.
 CMD ["node", "index.js"]
