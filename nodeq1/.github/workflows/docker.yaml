@@ -38,3 +38,4 @@ jobs:
       - name: Push Docker image
         run: |
           docker push username/repository-name:${{ github.sha }}
+          docker images
