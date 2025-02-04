@@ -1,5 +1,6 @@
 {
     "message": "This is some test data for the backend!",
-    "myname": "charan"
+    "myname": "charan",
+    "data": true
   }
   
