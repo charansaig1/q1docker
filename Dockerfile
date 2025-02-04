@@ -16,7 +16,7 @@ COPY . .
 
 
 # Use a default port if PORT is not set.
-ENV PORT=${PORT:-3000}
+# ENV PORT=${PORT:-3000}
 
 # Expose the port that the application listens on.
 
