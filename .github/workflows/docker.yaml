@@ -31,12 +31,12 @@ jobs:
       # Build the Docker image and tag it with the commit hash
       - name: Build Docker image
         run: |
-          docker build -t charansaig1/q1.1:${{ env.github }} .
+          docker build -t charansaig1/q1a:${{ secrets.github }} .
           docker images
 
       # Push the Docker image to Docker Hub
       - name: Push Docker image
         run: |
-          docker push charansaig1/q1.1:${{ env.github }}
+          docker push charansaig1/q1a:${{ secrets.github }}
           docker images
         ###
