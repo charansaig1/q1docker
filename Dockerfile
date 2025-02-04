@@ -15,8 +15,9 @@ RUN npm install
 COPY . .
 
 
-#set the port
-ENV PORT=${PORT}
+# Use a default port if PORT is not set.
+ENV PORT=${PORT:-3000}
+
 # Expose the port that the application listens on.
 
 EXPOSE ${PORT}
