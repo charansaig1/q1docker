@@ -1,13 +1,11 @@
 name: Backend Changes Workflow
-
 on:
   push:
-    paths: echo "Running tests for backend..."
+    paths:
       - "backend/**"
   pull_request:
     paths:
       - "backend/**"
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -30,6 +28,8 @@ jobs:
       - name: Run backend code
         run: node backend/app.js
 
+      - name: Echo Running Tests
+        run: echo "Running tests for backend..."
       - name: Test backend
         run: |
           echo "Running tests for backend..."
