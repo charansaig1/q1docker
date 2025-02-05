@@ -47,10 +47,10 @@ jobs:
         run: docker tag q5 ${{ secrets.DOCKER_USERNAME }}/q5:${{ github.sha }}
 
       - name: Push Docker Image to Docker Hub
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/q5:latest
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/q5:${{ github.sha }}
 
       - name: Verify Docker Image Exists
-        run: docker images | grep "${{ secrets.DOCKER_USERNAME }}/q5:latest" || exit 1
+        run: docker images | grep "${{ secrets.DOCKER_USERNAME }}/q5:${{ github.sha }}" || exit 1
 
       - name: Check Docker Image Size
         run: |
