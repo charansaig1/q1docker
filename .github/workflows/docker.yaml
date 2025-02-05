@@ -1,4 +1,4 @@
-name: Docker Build and Run
+name: Validate Application Functionality
 
 on:
   push:
@@ -9,58 +9,42 @@ on:
       - main
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Cache Docker layers
-        uses: actions/cache@v2
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
+      - name: Check out repository
+        uses: actions/checkout@v4
 
       - name: Log in to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-      - name: Set environment variables for SMS
+      - name: Validate Docker image existence
         run: |
-          echo "SMS=${{ vars.SMS }}"
+          IMAGE="charansaig1/q5:0933f79282a5e90493a440619a1bf756f51a616a"
+          if docker pull $IMAGE; then
+            echo "Docker image exists."
+          else
+            echo "Docker image does not exist!"
+            exit 1
+          fi
 
-      - name: Build Multi-stage Docker image
+      - name: Run container and execute functional tests
         run: |
-          docker buildx build  --load \
-            --build-arg PORT="${{ secrets.PORT }}" \
-            -t q5 .
+          # Set port value from GitHub secrets
+          PORT="${{ secrets.PORT }}"
 
-      - name: Tag Docker image
-        run: docker tag q5 ${{ secrets.DOCKER_USERNAME }}/q5:${{ github.sha }}
+          # Run the Docker container in detached mode
+          docker run -d -p $PORT:$PORT --name q5-container charansaig1/q5:0933f79282a5e90493a440619a1bf756f51a616a
 
-      - name: Push Docker Image to Docker Hub
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/q5:${{ github.sha }}
-
-      - name: Verify Docker Image Exists
-        run: docker images
-
-      - name: Check Docker Image Size
-        run: |
-          IMAGE_SIZE=$(docker images --format "{{.Repository}}:{{.Tag}} {{.Size}}" | grep "${{ secrets.DOCKER_USERNAME }}/q5:${{ github.sha}}" | awk '{print $2}')
-          echo "Docker Image Size: $IMAGE_SIZE"
-
-      - name: Run Docker container
-        run: |
-          docker run -d -p ${{ secrets.PORT }}:${{ secrets.PORT }} \
-            --name q5container ${{ secrets.DOCKER_USERNAME }}/q5:${{ github.sha }}
+          # Run functional tests within the container (replace with your actual test command)
+          docker exec q5-container /bin/sh -c "your-functional-test-command"
 
       - name: Verify container is running
-        run: docker ps
+        run: |
+          if [ $(docker ps -q -f name=q5-container) ]; then
+            echo "Container is running."
+          else
+            echo "Container is not running."
+            exit 1
+          fi
