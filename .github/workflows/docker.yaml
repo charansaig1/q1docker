@@ -45,7 +45,7 @@ jobs:
             -t q5:latest .
 
       - name: Tag Docker image
-        run: docker tag q5:latest q5:${{ github.sha }}
+        run: docker tag q5:latest charansaig1/q5:${{ github.sha }}
 
       - name: Run Docker container
         run: |
