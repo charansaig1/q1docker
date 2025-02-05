@@ -14,7 +14,7 @@ ENV SMS=${SMS}
 ENV PORT=${PORT}
 
 # Copy package files separately for better caching
-COPY package.json .
+COPY package.json package-lock.json ./
 
 # Install production dependencies only to install package log.json
 RUN npm ci --only=production
@@ -39,4 +39,4 @@ COPY --from=builder /usr/src/app .
 EXPOSE ${PORT}
 
 # Run the application
-CMD ["npm", "start"]
+CMD node index.js
