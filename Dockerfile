@@ -22,6 +22,9 @@ RUN npm ci --only=production
 # Copy the rest of the application code
 COPY . .
 
+# Build the application
+RUN npm run build 
+
 # Log the SMS environment variable (for verification)
 RUN echo "The SMS variable is: ${SMS}" > /usr/src/app/sms.txt
 
