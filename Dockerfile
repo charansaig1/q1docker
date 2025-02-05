@@ -1,22 +1,29 @@
-
-# Step 1: Use the official Node.js image from the Docker Hub
+# Use an official Node.js runtime as a parent image
 FROM node:16
 
+# Set build arguments
+ARG SMS
+ARG PORT
 
+# Set environment variables inside the container
+ENV SMS=${SMS}
+ENV PORT=${PORT}
+
+# Set the working directory
 WORKDIR /usr/src/app
 
-# Step 3: Copy the package.json and package-lock.json to install dependencies
+# Install dependencies
 COPY package*.json ./
-
-# Step 4: Install the Node.js dependencies
 RUN npm install
 
-# Copy the rest of the source files into the image.
+# Copy the rest of the application code
 COPY . .
 
+# Expose the port dynamically
+EXPOSE ${PORT}
 
-# Use a default port if PORT is not set.
-# ENV PORT=${PORT:-3000}
+# Log the SMS environment variable (for verification)
+RUN echo "The SMS variable is: ${SMS}" > /usr/src/app/sms.txt
 
-# Run the application.
-CMD ["node", "index.js"]
+# Run the application
+CMD ["npm", "start"]
