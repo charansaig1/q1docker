@@ -1,5 +1,9 @@
-# Use an official Node.js runtime as a parent image
-FROM node:16
+
+# Stage 1: Build stage (installs dependencies & compiles the app)
+FROM node:18-alpine AS builder
+
+# Set the working directory
+WORKDIR /usr/src/app
 
 # Set build arguments
 ARG SMS
@@ -9,21 +13,29 @@ ARG PORT
 ENV SMS=${SMS}
 ENV PORT=${PORT}
 
-# Set the working directory
-WORKDIR /usr/src/app
+# Copy package files separately for better caching
+COPY package.json package-lock.json ./
 
-# Install dependencies
-COPY package*.json ./
-RUN npm install
+# Install production dependencies only to install package log.json
+RUN npm ci --only=production
 
 # Copy the rest of the application code
 COPY . .
 
-# Expose the port dynamically
-EXPOSE ${PORT}
-
 # Log the SMS environment variable (for verification)
 RUN echo "The SMS variable is: ${SMS}" > /usr/src/app/sms.txt
+
+# Stage 2: Production-optimized lightweight image
+FROM node:18-alpine 
+
+# Set the working directory
+WORKDIR /usr/src/app
+
+# Copy only the necessary built files & dependencies from the builder stage
+COPY --from=builder /usr/src/app .
+
+# Expose the port dynamically
+EXPOSE ${PORT}
 
 # Run the application
 CMD ["npm", "start"]

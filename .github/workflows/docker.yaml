@@ -37,24 +37,35 @@ jobs:
         run: |
           echo "SMS=${{ vars.SMS }}"
 
-      - name: Build Docker image
+      - name: Build Multi-stage Docker image
         run: |
           docker buildx build  --load \
-            --build-arg SMS="${{ vars.SMS }}" \
             --build-arg PORT="${{ secrets.PORT }}" \
             -t q5:latest .
 
       - name: Tag Docker image
-        run: docker tag q5:latest charansaig1/q5:${{ github.sha }}
+        run: docker tag q5:latest ${{ secrets.DOCKER_USERNAME }}/q5:${{ github.sha }}
+
+      - name: Push Docker Image to Docker Hub
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/q5:latest
+
+      - name: Verify Docker Image Exists
+        run: docker images | grep "${{ secrets.DOCKER_USERNAME }}/q5:latest" || exit 1
+
+      - name: Check Docker Image Size
+        run: |
+          IMAGE_SIZE=$(docker images --format "{{.Repository}}:{{.Tag}} {{.Size}}" | grep "${{ secrets.DOCKER_USERNAME }}/q5:${{ github.sha}}" | awk '{print $2}')
+          echo "Docker Image Size: $IMAGE_SIZE"
 
       - name: Run Docker container
         run: |
           docker run -d -p ${{ secrets.PORT }}:${{ secrets.PORT }} \
-            --name q5container q5:${{ github.sha }}
+            --name q5container ${{ secrets.DOCKER_USERNAME }}/q5:${{ github.sha }}
 
       - name: Verify container is running
         run: docker ps
 
       - name: Stop the Docker container
         run: |
-          docker stop q5container
+          docker stop ${{ secrets.DOCKER_USERNAME }}/q5container
+          docker rm ${{ secrets.DOCKER_USERNAME }}/q5container
