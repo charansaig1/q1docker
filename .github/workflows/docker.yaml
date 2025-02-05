@@ -39,12 +39,10 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build \
-            --build-arg SMS=${{ vars.SMS }} \
-            --build-arg PORT=${{ secrets.PORT }} \
+          docker buildx build --load \
+            --build-arg SMS="${{ vars.SMS }}" \
+            --build-arg PORT="${{ secrets.PORT }}" \
             -t q4:latest .
-          #verify the image is built q4:latest
-          docker images
 
       - name: Tag Docker image
         run: docker tag q4:latest q4:${{ github.sha }}
