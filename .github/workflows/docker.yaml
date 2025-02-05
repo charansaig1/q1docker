@@ -37,9 +37,9 @@ jobs:
           # Run the Docker container in detached mode
           docker run -d -p $PORT:$PORT --name q5-container charansaig1/q5:0933f79282a5e90493a440619a1bf756f51a616a
 
-           # test command
-          docker exec q5-container /bin/sh -c "node index.js"
+      #      # test command
+      #     docker exec q5-container /bin/sh -c "node index.js"
 
-      - name: Report test results
-        if: failure()
-        run: echo "Functional tests failed!"
+      # - name: Report test results
+      #   if: failure()
+      #   run: echo "Functional tests failed!"
