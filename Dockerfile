@@ -17,7 +17,7 @@ ENV PORT=${PORT}
 COPY package.json .
 
 # Install production dependencies only to install package log.json
-RUN npm install --only=production
+RUN npm ci --only=production
 
 # Copy the rest of the application code
 COPY . .
