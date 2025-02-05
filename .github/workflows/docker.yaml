@@ -35,7 +35,7 @@ jobs:
 
       - name: Set environment variables for SMS
         run: |
-          echo "SMS=${{ secrets.SMS }}" >> $GITHUB_ENV
+          echo "SMS=${{ env.SMS }}" >> $GITHUB_ENV
 
       - name: Build Docker image
         run: |
