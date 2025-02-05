@@ -42,19 +42,19 @@ jobs:
           docker buildx build \
             --build-arg SMS="${{ vars.SMS }}" \
             --build-arg PORT="${{ secrets.PORT }}" \
-            -t q4:latest .
+            -t q5:latest .
 
       - name: Tag Docker image
-        run: docker tag q4:latest q4:${{ github.sha }}
+        run: docker tag q5:latest q5:${{ github.sha }}
 
       - name: Run Docker container
         run: |
           docker run -d -p ${{ secrets.PORT }}:${{ secrets.PORT }} \
-            --name q4container q4:${{ github.sha }}
+            --name q5container q5:${{ github.sha }}
 
       - name: Verify container is running
         run: docker ps
 
       - name: Stop the Docker container
         run: |
-          docker stop q4container
+          docker stop q5container
