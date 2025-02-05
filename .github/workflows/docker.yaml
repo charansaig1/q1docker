@@ -41,10 +41,10 @@ jobs:
         run: |
           docker buildx build  --load \
             --build-arg PORT="${{ secrets.PORT }}" \
-            -t q5:latest .
+            -t q5 .
 
       - name: Tag Docker image
-        run: docker tag q5:latest ${{ secrets.DOCKER_USERNAME }}/q5:${{ github.sha }}
+        run: docker tag q5 ${{ secrets.DOCKER_USERNAME }}/q5:${{ github.sha }}
 
       - name: Push Docker Image to Docker Hub
         run: docker push ${{ secrets.DOCKER_USERNAME }}/q5:latest
