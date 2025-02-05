@@ -39,7 +39,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker buildx build --load \
+          docker buildx build \
             --build-arg SMS="${{ vars.SMS }}" \
             --build-arg PORT="${{ secrets.PORT }}" \
             -t q4:latest .
