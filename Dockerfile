@@ -14,10 +14,10 @@ ENV SMS=${SMS}
 ENV PORT=${PORT}
 
 # Copy package files separately for better caching
-COPY package.json package-lock.json ./
+COPY package.json .
 
 # Install production dependencies only to install package log.json
-RUN npm install
+RUN npm install --only=production
 
 # Copy the rest of the application code
 COPY . .
