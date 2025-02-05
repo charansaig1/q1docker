@@ -64,8 +64,3 @@ jobs:
 
       - name: Verify container is running
         run: docker ps
-
-      - name: Stop the Docker container
-        run: |
-          docker stop ${{ secrets.DOCKER_USERNAME }}/q5container
-          docker rm ${{ secrets.DOCKER_USERNAME }}/q5container
